@@ -2,7 +2,6 @@ import 'package:flow_graph/flow_graph.dart' hide Graph;
 import 'package:flutter/material.dart';
 import 'package:prime_path_coverage/cfg_drawer/prime_path_coverage.dart';
 import 'package:prime_path_coverage/functional_style/functional_style.dart';
-import 'package:prime_path_coverage/utils/string_extension.dart';
 
 import 'family_node.dart';
 
@@ -71,17 +70,20 @@ class _CFGDrawerState extends State<CFGDrawer> {
             builder: (context, node) {
               return Container(
                 color: Colors.white60,
-                padding: const EdgeInsets.all(16),
+                padding: 16.edgeInsetsAll,
                 child: Text(
                   (node.data as FamilyNode).name,
-                  style: const TextStyle(color: Colors.black87, fontSize: 16),
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                  ),
                 ),
               );
             },
             nodeSecondaryMenuItems: (node) {
               return [
                 PopupMenuItem(
-                  child: const Text('Delete'),
+                  child: 'Delete'.text.render,
                   onTap: () {
                     setter(() {
                       node.deleteSelf();
@@ -105,27 +107,14 @@ class _CFGDrawerState extends State<CFGDrawer> {
   }
 
   //? SideBar
-  int from = 0;
-  int to = 0;
   Graph graph = Graph();
 
-  void printPPC(
-    List<GraphNode> nextList, [
-    Graph? graphBuilder,
-  ]) {
-    graphBuilder ??= Graph();
-    for (final node in nextList) {
-      if (node.nextList.isNotEmpty) {
-        for (final childNode in node.nextList) {
-          graphBuilder.addEdge(
-            int.parse(node.data.name),
-            int.parse(childNode.data.name),
-          );
-        }
-        printPPC(node.nextList, graphBuilder);
-      }
+  void printPPC() {
+    if (root.nextList.isNotEmpty) {
+      setState(
+        () => graph = Graph.from(root.nextList[0] as GraphNode<FamilyNode>),
+      );
     }
-    setState(() => graph = graphBuilder!);
   }
 
   Expanded get buildSidebar {
@@ -136,28 +125,7 @@ class _CFGDrawerState extends State<CFGDrawer> {
         children: [
           multiParentNode,
           const Divider(),
-          Row(
-            children: [
-              FunctionalStyle.textFiled.outlined
-                  .label('from')
-                  .onChange((value) {
-                    if (value.isNotEmpty) from = value.parsInt;
-                  })
-                  .margin(20.edgeInsetsAll)
-                  .expanded
-                  .render,
-              FunctionalStyle.textFiled.outlined
-                  .label('to')
-                  .onChange((value) {
-                    if (value.isNotEmpty) to = value.parsInt;
-                  })
-                  .margin(20.edgeInsetsAll)
-                  .expanded
-                  .render,
-              Icons.check.button.onPressed(() => printPPC(root.nextList)).render
-            ],
-          ),
-          graph.getPrimePaths(from, to).text.render
+          graph.getPrimePathsString().text.render
         ],
       ),
     );
@@ -189,9 +157,7 @@ class _CFGDrawerState extends State<CFGDrawer> {
               groupValue: direction,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    direction = value;
-                  });
+                  setState(() => direction = value);
                 }
               },
             ),
@@ -201,18 +167,21 @@ class _CFGDrawerState extends State<CFGDrawer> {
             Switch(
               value: centerLayout,
               onChanged: (b) {
-                setState(() {
-                  centerLayout = b;
-                });
+                setState(() => centerLayout = b);
               },
             ),
             p8,
             'Middle layout'.text.render,
             vDivider32,
             'Reset'.button.onPressed(() {
-              setState(() => root.clearAllNext());
+              setState(() {
+                root.clearAllNext();
+                graph = Graph();
+              });
               nodeCounter = 0;
             }).render,
+            vDivider32,
+            Icons.check.button.onPressed(printPPC).render,
             const SizedBox(width: 32),
           ],
         )
