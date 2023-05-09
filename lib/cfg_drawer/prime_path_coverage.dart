@@ -1,4 +1,4 @@
-import 'package:flow_graph/flow_graph.dart';
+import 'package:flow_graph/flow_graph.dart' show GraphNode;
 
 import 'family_node.dart';
 
@@ -10,6 +10,10 @@ class Graph {
   Graph();
 
   Graph.from(GraphNode<FamilyNode> root) {
+    _dfs(root, []);
+  }
+
+  Graph.fromTextFile(GraphNode<FamilyNode> root) {
     _dfs(root, []);
   }
 
@@ -34,21 +38,15 @@ class Graph {
     adjacencyList[source]!.add(destination);
   }
 
-  bool isPrimePath(List<int> path) {
-    if (path.length > 1 && path[0] == path[path.length - 1]) {
-      return true;
-    } else if (reachHead(path) && reachEnd(path)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  bool isPrimePath(List<int> path) =>
+      (path.length > 1 && path[0] == path[path.length - 1]) ||
+      (reachHead(path) && reachEnd(path));
 
   bool reachHead(List<int> path) {
     var formerNodes =
         adjacencyList.keys.where((n) => adjacencyList[n]!.contains(path[0]));
-    for (var n in formerNodes) {
-      if (!path.contains(n) || n == path[path.length - 1]) {
+    for (int node in formerNodes) {
+      if (!path.contains(node) || node == path[path.length - 1]) {
         return false;
       }
     }
@@ -57,8 +55,8 @@ class Graph {
 
   bool reachEnd(List<int> path) {
     var laterNodes = adjacencyList[path[path.length - 1]] ?? [];
-    for (var n in laterNodes) {
-      if (!path.contains(n) || n == path[0]) {
+    for (int node in laterNodes) {
+      if (!path.contains(node) || node == path[0]) {
         return false;
       }
     }
@@ -68,14 +66,14 @@ class Graph {
   bool isExtendable(List<int> path) => !(isPrimePath(path) || reachEnd(path));
 
   void findSimplePaths(List<List<int>> exPaths, List<List<int>> paths) {
-    var simplePaths = exPaths.where((p) => isPrimePath(p)).toList();
+    final simplePaths = exPaths.where((p) => isPrimePath(p)).toList();
     paths.addAll(simplePaths);
     exPaths = exPaths.where((p) => isExtendable(p)).toList();
     var newExPaths = <List<int>>[];
-    for (var p in exPaths) {
-      for (var nx in adjacencyList[p.last]!) {
-        if (!p.contains(nx) || nx == p[0]) {
-          newExPaths.add([...p, nx]);
+    for (List<int> path in exPaths) {
+      for (int node in adjacencyList[path.last]!) {
+        if (!path.contains(node) || node == path[0]) {
+          newExPaths.add([...path, node]);
         }
       }
     }
