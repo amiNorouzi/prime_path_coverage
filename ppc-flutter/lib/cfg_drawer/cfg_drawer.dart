@@ -111,11 +111,11 @@ class _CFGDrawerState extends State<CFGDrawer> {
   Graph graph = Graph();
 
   void printPPC() {
-    // if (root.nextList.isNotEmpty) {
-    //   setState(
-    //         () => graph = Graph.from(root.nextList[0] as GraphNode<FamilyNode>),
-    //   );
-    // }
+    if (root.nextList.isNotEmpty) {
+      setState(
+            () => graph = Graph.from(root.nextList[0] as GraphNode<FamilyNode>),
+      );
+    }
       print(graph.getPrimePathsString());
   }
 
