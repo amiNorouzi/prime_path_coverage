@@ -1,16 +1,14 @@
-# software_testing_first_project
+# Finding The Prime Paths
 
-A new Flutter project.
+## Introduction
 
-## Getting Started
+According to Prime path coverage criterion, this program will generate all the prime paths of graph whose structure is exactly defined by given text file.
 
-This project is a starting point for a Flutter application.
+>  NOTE: This repository contains a program with six different languages: Dart-Flutter, Java, Kotlin, Python, PHP, JavaScript.
 
-A few resources to get you started if this is your first Flutter project:
+> ⚠ WARNING: The program with Java language contains bugs that have not been fixed.
+## Define a Graph
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+The structure of the graph must be exactly defined. For example, as the structure shown in the below picture:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![graph](https://github.com/heshenghuan/Prime-Path-Coverage/blob/master/docs/pics/graph.png?raw=true)
