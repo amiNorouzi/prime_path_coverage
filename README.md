@@ -1,4 +1,4 @@
-# Finding The Prime Paths
+# Finding The Prime Paths Coverage
 
 ## Introduction
 
@@ -12,3 +12,6 @@ According to Prime path coverage criterion, this program will generate all the p
 The structure of the graph must be exactly defined. For example, as the structure shown in the below picture:
 
 ![graph](https://github.com/heshenghuan/Prime-Path-Coverage/blob/master/docs/pics/graph.png?raw=true)
+
+## Output:
+![Prime Paths Coverage](output.png)
